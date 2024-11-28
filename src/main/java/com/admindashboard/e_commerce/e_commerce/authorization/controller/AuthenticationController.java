@@ -33,7 +33,7 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (Exception e) {
-            return new ResponseEntity(new MessageResponse("Password and username mismatch", ResponseType.S), HttpStatus.OK);
+            return new ResponseEntity(new MessageResponse("Password and username mismatch", ResponseType.S), HttpStatus.UNAUTHORIZED);
         }
     }
 }
