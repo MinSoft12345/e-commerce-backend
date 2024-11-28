@@ -41,7 +41,7 @@ public class InitialUpdateScript {
         Optional<User> user1 = userRepository.findByUserName("SUPPORT");
 
         if (user1.isEmpty()) {
-            user.setUserName(userUtils.generateUniqueUserName());
+            user.setUserName("SUPPORT");
             user.setPassword(passwordEncoder.encode("ADMIN1234"));
 
             Set<Role> roleSet = new HashSet();
