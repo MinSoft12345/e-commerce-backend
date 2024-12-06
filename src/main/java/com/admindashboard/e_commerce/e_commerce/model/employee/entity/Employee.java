@@ -1,4 +1,4 @@
-package com.admindashboard.e_commerce.e_commerce.entity;
+package com.admindashboard.e_commerce.e_commerce.model.employee.entity;
 
 import com.admindashboard.e_commerce.e_commerce.authorization.User;
 import jakarta.persistence.Column;
