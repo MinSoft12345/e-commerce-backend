@@ -4,8 +4,8 @@ import com.admindashboard.e_commerce.e_commerce.authorization.Role;
 import com.admindashboard.e_commerce.e_commerce.authorization.RoleRepository;
 import com.admindashboard.e_commerce.e_commerce.authorization.User;
 import com.admindashboard.e_commerce.e_commerce.authorization.UserRepository;
-import com.admindashboard.e_commerce.e_commerce.entity.Employee;
-import com.admindashboard.e_commerce.e_commerce.repository.EmployeeRepository;
+import com.admindashboard.e_commerce.e_commerce.model.employee.entity.Employee;
+import com.admindashboard.e_commerce.e_commerce.model.employee.repository.EmployeeRepository;
 import com.admindashboard.e_commerce.e_commerce.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,17 +59,16 @@ public class InitialUpdateScript {
             user.setEmployee(employee);
             user.setTenantId(employee.getId());
             user.setCreatedDate(new Date());
-
             userRepository.save(user);
         }
     }
 
 
-//    public void addRole() {
-//        Role role = new Role();
-//        role.setAuthority("SUPPORT");
-//        role.setDescription("test data");
-//        role.setCreationDateTime(new Date());
-//        roleRepository.save(role);
-//    }
+    public void addRole() {
+        Role role = new Role();
+        role.setAuthority("SUPPORT");
+        role.setDescription("test data");
+        role.setCreationDateTime(new Date());
+        roleRepository.save(role);
+    }
 }
