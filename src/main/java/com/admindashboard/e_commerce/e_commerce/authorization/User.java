@@ -1,6 +1,6 @@
 package com.admindashboard.e_commerce.e_commerce.authorization;
 
-import com.admindashboard.e_commerce.e_commerce.entity.Employee;
+import com.admindashboard.e_commerce.e_commerce.model.employee.entity.Employee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
