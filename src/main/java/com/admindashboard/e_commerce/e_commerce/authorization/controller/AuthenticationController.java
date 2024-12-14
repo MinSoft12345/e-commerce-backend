@@ -20,10 +20,14 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
-    ) {
+    public ResponseEntity<?> register(
+            RegisterRequest request
+    ) {try {
         return ResponseEntity.ok(service.register(request));
+    }catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Registration failed. Please check your input and try again.");
+    }
     }
 
     @PostMapping("/authenticate")

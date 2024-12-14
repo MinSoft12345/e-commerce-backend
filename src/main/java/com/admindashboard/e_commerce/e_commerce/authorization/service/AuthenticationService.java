@@ -29,21 +29,21 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         String photoPath = null;
 
-        if (request.getPhoto() != null && !request.getPhoto().isEmpty()) {
-            try {
-                String uploadDir = "uploads/photos/";
-                File directory = new File(uploadDir);
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-                String fileName = UUID.randomUUID().toString() + "_" + request.getPhoto().getOriginalFilename();
-                File file = new File(uploadDir + fileName);
-                request.getPhoto().transferTo(file);
-                photoPath = uploadDir + fileName;
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to store photo", e);
-            }
-        }
+//        if (request.getPhoto() != null && !request.getPhoto().isEmpty()) {
+//            try {
+//                String uploadDir = "uploads/photos/";
+//                File directory = new File(uploadDir);
+//                if (!directory.exists()) {
+//                    directory.mkdirs();
+//                }
+//                String fileName = UUID.randomUUID().toString() + "_" + request.getPhoto().getOriginalFilename();
+//                File file = new File(uploadDir + fileName);
+//                request.getPhoto().transferTo(file);
+//                photoPath = uploadDir + fileName;
+//            } catch (IOException e) {
+//                throw new RuntimeException("Failed to store photo", e);
+//            }
+//        }
 
         var user = User.builder()
                 .userName(request.getUserName())
