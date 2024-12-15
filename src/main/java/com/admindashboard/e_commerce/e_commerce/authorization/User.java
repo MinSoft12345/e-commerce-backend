@@ -63,6 +63,12 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Employee employee;
 
+    private String adminName;
+    private String email;
+    private String phoneNo;
+    private String nidNo;
+    private String photoPath;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
