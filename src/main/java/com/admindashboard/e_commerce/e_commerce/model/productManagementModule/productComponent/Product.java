@@ -1,18 +1,14 @@
-package com.admindashboard.e_commerce.e_commerce.model.product.entity;
+package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent;
 
+import com.admindashboard.e_commerce.e_commerce.allenum.ProductStatus;
 import com.admindashboard.e_commerce.e_commerce.authorization.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductType;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productVariantComponent.ProductVariants;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,6 +19,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "EC_PRODUCT")
 public class Product {
     @Id
@@ -30,24 +29,46 @@ public class Product {
     @GeneratedValue(generator = "idGen")
     private String id;
 
-    @Column(nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
-    @Column(name = "description")
+    @Column(name = "description",columnDefinition = "text")
     private String description;
-
-    @Column(name = "product_image")
-    private String productImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private ProductType category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "prod_status")
+    private ProductStatus prodStatus;
+
+    @Column(name = "base_price")
+    private Integer basePrice;
+
     @Column(name = "tenant_id", nullable = false)
     private String tenantId;
 
+    @Column(name = "sku")
+    private String sku;
+
+    @Column(name = "score")
+    private Integer score;
+
+    @Column(name = "meta_tag_title")
+    private String metaTagTitle;
+
+    @Column(name = "meta_tag_description")
+    private String metaTagDescription;
+
+    @Column(name = "meta_tag_keyword")
+    private String metaTagKeyword;
+
     @Column(name = "is_active")
     private Boolean isActive = true;
+
+    @Column(name = "product_thumbnail_url")
+    private String productThumbnailUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
@@ -64,7 +85,6 @@ public class Product {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductVariants> productVariantsList = new ArrayList<>();
