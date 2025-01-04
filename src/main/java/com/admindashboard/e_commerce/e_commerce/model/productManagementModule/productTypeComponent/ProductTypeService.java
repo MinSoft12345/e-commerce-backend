@@ -3,6 +3,7 @@ package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.p
 import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.authorization.User;
 import com.admindashboard.e_commerce.e_commerce.authorization.UserRepository;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductTypeDto;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,5 +58,15 @@ public class ProductTypeService {
                 .description(productType.getDescription())
                 .productTypeId(productType.getId())
                 .build();
+    }
+
+    public List<ProductTypeDto> getAllProductTypess() {
+        List<Object[]> rawResults = productTypeRepository.findAllProductTypesRaw();
+        return rawResults.stream()
+                .map(result -> new ProductTypeDto(
+                        ((String) result[0]),
+                        (String) result[1]
+                ))
+                .toList();
     }
 }
