@@ -1,12 +1,14 @@
-package com.admindashboard.e_commerce.e_commerce.model.product.entity;
+package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,6 +17,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "EC_PRODUCT_TYPE")
 public class ProductType {
     @Id
@@ -22,8 +27,8 @@ public class ProductType {
     @GeneratedValue(generator = "idGen")
     private String id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false,unique = true)
+    private String typeName;
 
     @Column(name = "description")
     private String description;
