@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product-variant")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductVariantsController {
 

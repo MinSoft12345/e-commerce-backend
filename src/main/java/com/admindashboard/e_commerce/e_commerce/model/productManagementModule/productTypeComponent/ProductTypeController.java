@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/product-type")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductTypeController {
     private final ProductTypeService productTypeService;
