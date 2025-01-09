@@ -22,7 +22,7 @@ public class ProductRequest {
         private String categoryId;
         private ProductStatus prodStatus;
         private Integer basePrice;
-        private Boolean isActive;
+//        private Boolean isActive;
         private String sku;
         private String metaTagTitle;
         private String metaTagDescription;
