@@ -12,7 +12,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/product-image")
-@CrossOrigin(origins = "*")
 public class ProductImageController {
 
     private final ProductImageService productImageService;

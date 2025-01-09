@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product-type")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductTypeController {
     private final ProductTypeService productTypeService;

@@ -15,7 +15,6 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/file/")
-@CrossOrigin(origins = "*")
 public class FileController {
     private final FileService fileService;
 
