@@ -22,6 +22,15 @@ public class ProductResponse {
         private String categoryName;
         private ProductStatus prodStatus;
         private Integer basePrice;
+        private Integer vat;
+        private Integer discount;
+        private Integer width;
+        private Integer height;
+        private Integer length;
+        private Integer weight;
+        private Integer prodCurrPrice;
+        private Integer stockAmount;
+        private String barcode;
         private String sku;
         private Integer score;
         private String metaTagTitle;
