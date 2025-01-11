@@ -46,6 +46,33 @@ public class Product {
     @Column(name = "base_price")
     private Integer basePrice;
 
+    @Column(name = "vat")
+    private Integer vat;
+
+    @Column(name = "discount")
+    private Integer discount;
+
+    @Column(name = "width")
+    private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "length")
+    private Integer length;
+
+    @Column(name = "weight")
+    private Integer weight;
+
+    @Column(name = "prod_current_price")
+    private Integer prodCurrPrice;
+
+    @Column(name = "stock_amount")
+    private Integer stockAmount;
+
+    @Column(name = "bar_code")
+    private String barcode;
+
     @Column(name = "tenant_id", nullable = false)
     private String tenantId;
 

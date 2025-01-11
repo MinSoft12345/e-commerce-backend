@@ -22,6 +22,15 @@ public class ProductRequest {
         private String categoryId;
         private ProductStatus prodStatus;
         private Integer basePrice;
+        private Integer vat;
+        private Integer discount;
+        private Integer width;
+        private Integer height;
+        private Integer length;
+        private Integer weight;
+        private Integer prodCurrPrice;
+        private Integer StockAmount;
+        private String barcode;
 //        private Boolean isActive;
         private String sku;
         private String metaTagTitle;
