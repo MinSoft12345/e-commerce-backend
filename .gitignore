@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+productImages/Screenshot 2024-09-10 233952.png
+src/main/resources/application.properties
