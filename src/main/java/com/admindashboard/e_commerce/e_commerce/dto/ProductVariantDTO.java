@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductVariantDTO {
     private String id;
-    private String categoryName;
     private String productName;
-    private Integer prodPrice;
+    private String variantName;
+    private BigDecimal variantPrice;
     private Integer stockAmount;
-    private String prodStatus;
+    private String variantStatus;
     private String createdAt;
 }
