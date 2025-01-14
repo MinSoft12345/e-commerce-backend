@@ -27,7 +27,9 @@ public class ProductVariantsRequest {
     private Integer length;
     private String barCode;
     private Integer quantity;
-    private BigDecimal price;
+    private BigDecimal basePrice;
+    private BigDecimal currPrice;
+    private String variantStatus;
     private String imageId;
     private String colorCode;
 

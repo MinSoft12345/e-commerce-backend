@@ -1,6 +1,8 @@
 package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent;
 import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductDto;
 import com.admindashboard.e_commerce.e_commerce.dto.ProductTypeDto;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductVariantDTO;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeResponse;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
@@ -45,5 +47,15 @@ public class ProductTypeController {
     @GetMapping("/prod-type-list")
     public List<ProductTypeDto> getProductTypes() {
         return productTypeService.getAllProductTypess();
+    }
+
+    @GetMapping("/get-all-products")
+    public List<ProductDto> getAllProducts() {
+        return productTypeService.getAllProducts();
+    }
+
+    @GetMapping("/get-product-variants")
+    public List<ProductVariantDTO> getAllProductVariants() {
+        return productTypeService.getAllProductVariants();
     }
 }

@@ -18,7 +18,7 @@ public class ProductVariantsController {
     private final ProductVariantsService productVariantsService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addProductVariant(@RequestBody ProductVariantsRequest request) {
+    public ResponseEntity<?> addProductVariant( ProductVariantsRequest request) {
         try {
             ProductVariantsResponse response = productVariantsService.addProductVariant(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
