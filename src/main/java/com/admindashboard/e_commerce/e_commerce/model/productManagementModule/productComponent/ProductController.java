@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<?> addProduct(ProductRequest request) {
         try {
             ProductResponse response = productService.addProduct(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);

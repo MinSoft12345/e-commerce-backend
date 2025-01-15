@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.admindashboard.e_commerce.e_commerce.allenum.ProductStatus.INACTIVE;
+
 @Service
 public class ProductService {
 
@@ -46,6 +48,7 @@ public class ProductService {
 
 
         User creator = user1.get();
+        Boolean isActive = !request.getProdStatus().equals(INACTIVE);
 
         var product = Product.builder()
                 .productName(request.getProductName())
@@ -53,13 +56,22 @@ public class ProductService {
                 .category(productType1.get())
                 .prodStatus(request.getProdStatus())
                 .basePrice(request.getBasePrice())
+                .vat(request.getVat())
+                .discount(request.getDiscount())
+                .width(request.getWidth())
+                .height(request.getHeight())
+                .length(request.getLength())
+                .weight(request.getWeight())
+                .prodCurrPrice(request.getProdCurrPrice())
+                .stockAmount(request.getStockAmount())
+                .barcode(request.getBarcode())
                 .tenantId(creator.getTenantId())
                 .sku(request.getSku())
                 .score(request.getScore())
                 .metaTagTitle(request.getMetaTagTitle())
                 .metaTagDescription(request.getMetaTagDescription())
                 .metaTagKeyword(request.getMetaTagKeyword())
-                .isActive(request.getIsActive())
+                .isActive(isActive)
                 .createdBy(creator)
                 .updatedBy(creator)
                 .productThumbnailUrl(productThumbnail.getImageUrl())
@@ -73,6 +85,15 @@ public class ProductService {
                 .categoryName(productType1.get().getTypeName())
                 .prodStatus(product.getProdStatus())
                 .basePrice(product.getBasePrice())
+                .vat(request.getVat())
+                .discount(request.getDiscount())
+                .width(request.getWidth())
+                .height(request.getHeight())
+                .length(request.getLength())
+                .weight(request.getWeight())
+                .prodCurrPrice(request.getProdCurrPrice())
+                .stockAmount(request.getStockAmount())
+                .barcode(request.getBarcode())
                 .sku(product.getSku())
                 .score(product.getScore())
                 .metaTagTitle(product.getMetaTagTitle())

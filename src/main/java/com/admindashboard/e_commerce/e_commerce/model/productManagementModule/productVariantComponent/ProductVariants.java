@@ -74,7 +74,13 @@ public class ProductVariants {
     private Integer quantity;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal basePrice;
+
+    @Column(nullable = false)
+    private BigDecimal currPrice;
+
+    @Column(name = "variant_status", nullable = false)
+    private String variantStatus;
 
 //    @Column
 //    private BigDecimal discount;

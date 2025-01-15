@@ -1,5 +1,8 @@
 package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent;
 import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductDto;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductTypeDto;
+import com.admindashboard.e_commerce.e_commerce.dto.ProductVariantDTO;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductTypeResponse;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
@@ -9,9 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product-type")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductTypeController {
     private final ProductTypeService productTypeService;
@@ -37,5 +41,21 @@ public class ProductTypeController {
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageResponse("An error occurred while adding product type", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @GetMapping("/prod-type-list")
+    public List<ProductTypeDto> getProductTypes() {
+        return productTypeService.getAllProductTypess();
+    }
+
+    @GetMapping("/get-all-products")
+    public List<ProductDto> getAllProducts() {
+        return productTypeService.getAllProducts();
+    }
+
+    @GetMapping("/get-product-variants")
+    public List<ProductVariantDTO> getAllProductVariants() {
+        return productTypeService.getAllProductVariants();
     }
 }
