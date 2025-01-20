@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductResponse {
-        private String productId;
+
         private String productName;
         private String description;
         private String thumbNailUrl;
@@ -39,4 +39,8 @@ public class ProductResponse {
         private Boolean isActive;
         private String createdBy;
         private String updatedBy;
+
+        private String productThumbnailId;
+        private String productId;
+
 }
