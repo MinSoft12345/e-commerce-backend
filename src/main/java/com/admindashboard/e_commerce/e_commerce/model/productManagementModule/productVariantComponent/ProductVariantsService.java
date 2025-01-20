@@ -2,17 +2,26 @@ package com.admindashboard.e_commerce.e_commerce.model.productManagementModule.p
 
 import com.admindashboard.e_commerce.e_commerce.authorization.User;
 import com.admindashboard.e_commerce.e_commerce.authorization.UserRepository;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.Product;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImage;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImageRepository;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductType;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.admindashboard.e_commerce.e_commerce.allenum.ProductStatus.INACTIVE;
 
 @Service
 public class ProductVariantsService {
@@ -28,6 +37,9 @@ public class ProductVariantsService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    ProductTypeRepository productTypeRepository;
 
     public ProductVariantsResponse addProductVariant(ProductVariantsRequest request)
     {
@@ -86,4 +98,103 @@ public class ProductVariantsService {
                 .imageUrl(image.getImageUrl())
             .build();
     }
+
+    public List<ProductVariantsResponse> getProductVariantList(Pageable pageable)
+    {
+        Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+
+        return productPage.stream().map(this:: mapToProductVariantResponse).toList();
+    }
+
+    public ProductVariantsResponse getProductVariantById(String productVariantId)
+    {
+        ProductVariants productVariants = productVariantsRepository.findById(productVariantId).orElseThrow(()-> new EntityNotFoundException("Product is not found."));
+        return mapToProductVariantResponse(productVariants);
+    }
+
+
+    public ProductVariantsResponse updateProductVariant(ProductVariantsRequest request) {
+        // Retrieve the updater user
+        User updater = userRepository.findByUserName(request.getUserName())
+                .orElseThrow(() -> new EntityNotFoundException("Updater user name is not found."));
+
+        // Retrieve the product variant to be updated
+        ProductVariants productVariants = productVariantsRepository.findById(request.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product ID not found."));
+
+        // Update fields from the request
+        if (request.getVariantName() != null) {
+            productVariants.setVariantName(request.getVariantName());
+        }
+        if (request.getVariantDescription() != null) {
+            productVariants.setVariantDescription(request.getVariantDescription());
+        }
+        if (request.getWeight() != null) {
+            productVariants.setWeight(request.getWeight());
+        }
+        if (request.getHeight() != null) {
+            productVariants.setHeight(request.getHeight());
+        }
+        if (request.getWidth() != null) {
+            productVariants.setWidth(request.getWidth());
+        }
+        if (request.getLength() != null) {
+            productVariants.setLength(request.getLength());
+        }
+        if (request.getBarCode() != null) {
+            productVariants.setBarCode(request.getBarCode());
+        }
+        if (request.getQuantity() != null) {
+            productVariants.setQuantity(request.getQuantity());
+        }
+        if (request.getBasePrice() != null) {
+            productVariants.setBasePrice(request.getBasePrice());
+        }
+        if (request.getCurrPrice() != null) {
+            productVariants.setBasePrice(request.getCurrPrice());
+        }
+        if (request.getVariantStatus() != null) {
+            productVariants.setVariantStatus(request.getVariantStatus());
+        }
+        if (request.getColorCode() != null) {
+            productVariants.setColorCode(request.getColorCode());
+        }
+
+        if (request.getProductScore() != null) {
+            productVariants.setProductScore(request.getProductScore());
+        }
+
+        if (request.getImageId() != null) {
+            ProductImage productImage = productImageRepository.findById(request.getImageId())
+                    .orElseThrow(() -> new RuntimeException("Image thumbnail is not found."));
+            productVariants.setProductImage(productImage);
+        }
+        productVariants = productVariantsRepository.save(productVariants);
+
+        return mapToProductVariantResponse(productVariants);
+    }
+
+
+    private ProductVariantsResponse mapToProductVariantResponse(ProductVariants productVariants) {
+        return ProductVariantsResponse.builder()
+                .variantId(productVariants.getId())
+                .variantName(productVariants.getVariantName()) // Assuming this exists
+                .variantDescription(productVariants.getVariantDescription())
+                .weight(productVariants.getWeight())
+                .height(productVariants.getHeight())
+                .width(productVariants.getWidth())
+                .length(productVariants.getLength())
+                .barCode(productVariants.getBarCode())
+                .quantity(productVariants.getQuantity())
+                .basePrice(productVariants.getBasePrice())
+                .currPrice(productVariants.getCurrPrice())
+                .variantStatus(productVariants.getVariantStatus())
+                .colorCode(productVariants.getColorCode())
+                .productScore(productVariants.getProductScore())
+                .imageUrl(productVariants.getProductImage().getImageUrl())
+                .sellCount(productVariants.getSellCount())
+                .reviewCount(productVariants.getReviewCount())
+                .build();
+    }
+
 }
