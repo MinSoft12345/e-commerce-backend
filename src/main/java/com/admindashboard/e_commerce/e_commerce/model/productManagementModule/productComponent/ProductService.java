@@ -10,6 +10,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.pr
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductType;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -101,53 +102,97 @@ public class ProductService {
 
     public ProductResponse updateProduct(ProductRequest request)
     {
-        User updater = userRepository.findByUserName(request.getUserName()).orElseThrow(
-                () -> new EntityNotFoundException("updater user name is not found."));
 
-        ProductType  productType = productTypeRepository.findById(request.getCategoryId()).orElseThrow(
-                () -> new EntityNotFoundException("Category or product type name is not found."));
+        User updater = userRepository.findByUserName(request.getUserName())
+                .orElseThrow(() -> new EntityNotFoundException("Updater user name is not found."));
 
-        Product product = productRepository.findById(request.getProductId()).orElseThrow(
-                () -> new EntityNotFoundException("Product id not found."));
+        ProductType productType = productTypeRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category or product type is not found."));
 
-        if(request.getProductThumbnailId() != null){
-            ProductImage productThumbnail = productImageRepository.findById(request.getProductThumbnailId()).orElseThrow(
-                    () -> new RuntimeException("Image thumbnail is not found"));
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product ID not found."));
 
+        if (request.getProductThumbnailId() != null) {
+            ProductImage productThumbnail = productImageRepository.findById(request.getProductThumbnailId())
+                    .orElseThrow(() -> new RuntimeException("Image thumbnail is not found."));
             product.setProductThumbnailUrl(productThumbnail.getImageUrl());
         }
 
-
-        Boolean isActive = !request.getProdStatus().equals(INACTIVE);
-
-        product.setProductName(request.getProductName());
-        product.setDescription(request.getDescription());
-        product.setCategory(productType);
-        product.setProdStatus(request.getProdStatus());
-        product.setBasePrice(request.getBasePrice());
-        product.setVat(request.getVat());
-        product.setDiscount(request.getDiscount());
-        product.setWidth(request.getWidth());
-        product.setHeight(request.getHeight());
-        product.setLength(request.getLength());
-        product.setWeight(request.getWeight());
-        product.setProdCurrPrice(request.getProdCurrPrice());
-        product.setStockAmount(request.getStockAmount());
-        product.setBarcode(request.getBarcode());
-        product.setTenantId(updater.getTenantId());
-        product.setSku(request.getSku());
-        product.setScore(request.getScore());
-        product.setMetaTagTitle(request.getMetaTagTitle());
-        product.setMetaTagDescription(request.getMetaTagDescription());
-        product.setMetaTagKeyword(request.getMetaTagKeyword());
-        product.setIsActive(isActive);
-        product.setUpdatedBy(updater);
+        updateProductFields(product, request, updater, productType);
 
         product = productRepository.save(product);
 
         return mapToProductResponse(product);
-
     }
+
+    private void updateProductFields(Product product, ProductRequest request, User updater, ProductType productType) {
+        Boolean isActive = request.getProdStatus() != null && !request.getProdStatus().equals(INACTIVE);
+
+        if (request.getProductName() != null) {
+            product.setProductName(request.getProductName());
+        }
+        if (request.getDescription() != null) {
+            product.setDescription(request.getDescription());
+        }
+        if (productType != null) {
+            product.setCategory(productType);
+        }
+        if (request.getProdStatus() != null) {
+            product.setProdStatus(request.getProdStatus());
+        }
+        if (request.getBasePrice() != null) {
+            product.setBasePrice(request.getBasePrice());
+        }
+        if (request.getVat() != null) {
+            product.setVat(request.getVat());
+        }
+        if (request.getDiscount() != null) {
+            product.setDiscount(request.getDiscount());
+        }
+        if (request.getWidth() != null) {
+            product.setWidth(request.getWidth());
+        }
+        if (request.getHeight() != null) {
+            product.setHeight(request.getHeight());
+        }
+        if (request.getLength() != null) {
+            product.setLength(request.getLength());
+        }
+        if (request.getWeight() != null) {
+            product.setWeight(request.getWeight());
+        }
+        if (request.getProdCurrPrice() != null) {
+            product.setProdCurrPrice(request.getProdCurrPrice());
+        }
+        if (request.getStockAmount() != null) {
+            product.setStockAmount(request.getStockAmount());
+        }
+        if (request.getBarcode() != null) {
+            product.setBarcode(request.getBarcode());
+        }
+        if (request.getSku() != null) {
+            product.setSku(request.getSku());
+        }
+        if (request.getScore() != null) {
+            product.setScore(request.getScore());
+        }
+        if (request.getMetaTagTitle() != null) {
+            product.setMetaTagTitle(request.getMetaTagTitle());
+        }
+        if (request.getMetaTagDescription() != null) {
+            product.setMetaTagDescription(request.getMetaTagDescription());
+        }
+        if (request.getMetaTagKeyword() != null) {
+            product.setMetaTagKeyword(request.getMetaTagKeyword());
+        }
+
+        if (request.getProdStatus() != null) {
+            product.setIsActive(isActive);
+        }
+
+        product.setUpdatedBy(updater);
+    }
+
 
     private ProductResponse mapToProductResponse(Product product)
     {

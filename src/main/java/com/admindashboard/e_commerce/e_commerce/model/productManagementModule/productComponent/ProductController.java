@@ -6,6 +6,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DT
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,19 +51,27 @@ public class ProductController {
 
     @GetMapping("/get-by-id/{productId}")
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
-        try{
-            return ResponseEntity.ok(productService.getProductById(productId));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            ProductResponse productResponse = productService.getProductById(productId);
+            return ResponseEntity.ok(productResponse);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage(), ResponseType.E), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+
     @PutMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody ProductRequest request) {
-        try{
+        try {
             return ResponseEntity.ok(productService.updateProduct(request));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage(), ResponseType.E), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
