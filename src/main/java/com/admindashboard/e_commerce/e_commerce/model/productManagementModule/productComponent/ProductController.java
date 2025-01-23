@@ -64,7 +64,7 @@ public class ProductController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<?> updateProduct(ProductRequest request) {
         try {
             return ResponseEntity.ok(productService.updateProduct(request));
         } catch (EntityNotFoundException ex) {
