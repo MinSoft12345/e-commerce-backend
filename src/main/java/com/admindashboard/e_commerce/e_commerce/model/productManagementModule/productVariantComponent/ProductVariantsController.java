@@ -55,7 +55,7 @@ public class ProductVariantsController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProductVariants(@Valid @RequestBody ProductVariantsRequest request) {
+    public ResponseEntity<?> updateProductVariants(ProductVariantsRequest request) {
         try {
             ProductVariantsResponse response = productVariantsService.updateProductVariant(request);
             return ResponseEntity.ok(response);
