@@ -6,6 +6,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DT
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,11 +55,16 @@ public class ProductVariantsController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProductVariants(@RequestBody ProductVariantsRequest request) {
-        try{
-            return ResponseEntity.ok(productVariantsService.updateProductVariant(request));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> updateProductVariants(ProductVariantsRequest request) {
+        try {
+            ProductVariantsResponse response = productVariantsService.updateProductVariant(request);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage(), ResponseType.E), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            // Log the exception
+            ex.printStackTrace();
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
