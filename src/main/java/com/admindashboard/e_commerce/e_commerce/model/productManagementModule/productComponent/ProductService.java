@@ -5,6 +5,7 @@ import com.admindashboard.e_commerce.e_commerce.authorization.UserRepository;
 import com.admindashboard.e_commerce.e_commerce.dto.ProductTypeDto;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImage;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImageRepository;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductType;
@@ -86,12 +87,22 @@ public class ProductService {
         return mapToProductResponse(product);
     }
 
-    public List<ProductResponse> getProductList(Pageable pageable)
-    {
-        Page<Product>productPage = productRepository.findAll(pageable);
+    public PaginatedResponse<ProductResponse> getProductList(Pageable pageable) {
+        Page<Product> productPage = productRepository.findAll(pageable);
 
-        return productPage.stream().map(this::mapToProductResponse).toList();
+        List<ProductResponse> products = productPage.stream()
+                .map(this::mapToProductResponse)
+                .toList();
+
+        return new PaginatedResponse<>(
+                products,
+                productPage.getTotalPages(),
+                productPage.getTotalElements(),
+                productPage.getNumber(),
+                productPage.getSize()
+        );
     }
+
 
     public ProductResponse getProductById(String productId)
     {

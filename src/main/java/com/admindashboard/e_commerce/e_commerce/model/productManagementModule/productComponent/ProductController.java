@@ -4,6 +4,7 @@ import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.dto.ProductTypeDto;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -40,14 +41,17 @@ public class ProductController {
     }
 
     @GetMapping("/prod-list")
-    public ResponseEntity<?> getProductList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        try{
+    public ResponseEntity<?> getProductList(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size) {
+        try {
             Pageable pageable = PageRequest.of(page, size);
-            return ResponseEntity.ok(productService.getProductList(pageable));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+            PaginatedResponse<ProductResponse> response = productService.getProductList(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/get-by-id/{productId}")
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
