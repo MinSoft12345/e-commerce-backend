@@ -4,6 +4,7 @@ import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProductVariantsController {
 
     private final ProductVariantsService productVariantsService;
+
+    private final ProductVariantsRepository variantRepository;
 
     @PostMapping("/add")
     public ResponseEntity<?> addProductVariant( ProductVariantsRequest request) {
@@ -65,6 +68,16 @@ public class ProductVariantsController {
             // Log the exception
             ex.printStackTrace();
             return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/delete/{variantID}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String variantID) {
+        if (variantRepository.existsById(variantID)) {
+            variantRepository.deleteById(variantID);
+            return ResponseEntity.ok("Product Variant deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Variant not found.");
         }
     }
 }
