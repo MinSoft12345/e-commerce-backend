@@ -6,6 +6,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DT
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.Product;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImage;
@@ -100,12 +101,27 @@ public class ProductVariantsService {
             .build();
     }
 
-    public List<ProductVariantsResponse> getProductVariantList(Pageable pageable)
-    {
-        Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+//    public List<ProductVariantsResponse> getProductVariantList(Pageable pageable)
+//    {
+//        Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+//
+//        return productPage.stream().map(this:: mapToProductVariantResponse).toList();
+//    }
+public PaginatedResponse<ProductVariantsResponse> getProductVariantList(Pageable pageable) {
+    Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+    List<ProductVariantsResponse> products = productPage.stream()
+            .map(this::mapToProductVariantResponse)
+            .toList();
 
-        return productPage.stream().map(this:: mapToProductVariantResponse).toList();
-    }
+    return new PaginatedResponse<>(
+            products,
+            productPage.getTotalPages(),
+            productPage.getTotalElements(),
+            productPage.getNumber(),
+            productPage.getSize()
+    );
+}
+
 
     public ProductVariantsResponse getProductVariantById(String productVariantId)
     {
