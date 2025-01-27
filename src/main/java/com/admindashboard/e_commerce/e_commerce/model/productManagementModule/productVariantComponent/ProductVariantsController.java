@@ -4,6 +4,7 @@ import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,14 +40,20 @@ public class ProductVariantsController {
     }
 
     @GetMapping("/prod-variants-list")
-    public ResponseEntity<?> getProductVariantsList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        try{
+    public ResponseEntity<?> getProductVariantsList(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+        try {
             Pageable pageable = PageRequest.of(page, size);
-            return ResponseEntity.ok(productVariantsService.getProductVariantList(pageable));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+            PaginatedResponse<ProductVariantsResponse> response = productVariantsService.getProductVariantList(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(
+                    new MessageResponse("Internal server error.", ResponseType.E),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
+
 
     @GetMapping("/get-by-id/{productVariantId}")
     public ResponseEntity<?> getProductVariantsById(@PathVariable String productVariantId) {
