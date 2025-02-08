@@ -4,8 +4,11 @@ import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProductVariantsController {
 
     private final ProductVariantsService productVariantsService;
+
+    private final ProductVariantsRepository variantRepository;
 
     @PostMapping("/add")
     public ResponseEntity<?> addProductVariant( ProductVariantsRequest request) {
@@ -35,14 +40,20 @@ public class ProductVariantsController {
     }
 
     @GetMapping("/prod-variants-list")
-    public ResponseEntity<?> getProductVariantsList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        try{
+    public ResponseEntity<?> getProductVariantsList(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+        try {
             Pageable pageable = PageRequest.of(page, size);
-            return ResponseEntity.ok(productVariantsService.getProductVariantList(pageable));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+            PaginatedResponse<ProductVariantsResponse> response = productVariantsService.getProductVariantList(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(
+                    new MessageResponse("Internal server error.", ResponseType.E),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
+
 
     @GetMapping("/get-by-id/{productVariantId}")
     public ResponseEntity<?> getProductVariantsById(@PathVariable String productVariantId) {
@@ -54,11 +65,26 @@ public class ProductVariantsController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProductVariants(@RequestBody ProductVariantsRequest request) {
-        try{
-            return ResponseEntity.ok(productVariantsService.updateProductVariant(request));
-        } catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("internal server error.",ResponseType.E),HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> updateProductVariants(ProductVariantsRequest request) {
+        try {
+            ProductVariantsResponse response = productVariantsService.updateProductVariant(request);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage(), ResponseType.E), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            // Log the exception
+            ex.printStackTrace();
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/delete/{variantID}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String variantID) {
+        if (variantRepository.existsById(variantID)) {
+            variantRepository.deleteById(variantID);
+            return ResponseEntity.ok("Product Variant deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Variant not found.");
         }
     }
 }

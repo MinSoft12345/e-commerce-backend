@@ -6,6 +6,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DT
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsRequest;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.DTO.ProductVariantsResponse;
+import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.PaginatedResponse;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.Product;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.ProductRepository;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productImageComponent.ProductImage;
@@ -13,6 +14,7 @@ import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.pr
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductType;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productTypeComponent.ProductTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,12 +101,27 @@ public class ProductVariantsService {
             .build();
     }
 
-    public List<ProductVariantsResponse> getProductVariantList(Pageable pageable)
-    {
-        Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+//    public List<ProductVariantsResponse> getProductVariantList(Pageable pageable)
+//    {
+//        Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+//
+//        return productPage.stream().map(this:: mapToProductVariantResponse).toList();
+//    }
+public PaginatedResponse<ProductVariantsResponse> getProductVariantList(Pageable pageable) {
+    Page<ProductVariants> productPage = productVariantsRepository.findAll(pageable);
+    List<ProductVariantsResponse> products = productPage.stream()
+            .map(this::mapToProductVariantResponse)
+            .toList();
 
-        return productPage.stream().map(this:: mapToProductVariantResponse).toList();
-    }
+    return new PaginatedResponse<>(
+            products,
+            productPage.getTotalPages(),
+            productPage.getTotalElements(),
+            productPage.getNumber(),
+            productPage.getSize()
+    );
+}
+
 
     public ProductVariantsResponse getProductVariantById(String productVariantId)
     {
@@ -112,66 +129,41 @@ public class ProductVariantsService {
         return mapToProductVariantResponse(productVariants);
     }
 
-
+    @Transactional
     public ProductVariantsResponse updateProductVariant(ProductVariantsRequest request) {
-        // Retrieve the updater user
-        User updater = userRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new EntityNotFoundException("Updater user name is not found."));
 
-        // Retrieve the product variant to be updated
-        ProductVariants productVariants = productVariantsRepository.findById(request.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product ID not found."));
+    User updater = userRepository.findByUserName(request.getUserName())
+            .orElseThrow(() -> new EntityNotFoundException("Updater user name is not found."));
 
-        // Update fields from the request
-        if (request.getVariantName() != null) {
-            productVariants.setVariantName(request.getVariantName());
-        }
-        if (request.getVariantDescription() != null) {
-            productVariants.setVariantDescription(request.getVariantDescription());
-        }
-        if (request.getWeight() != null) {
-            productVariants.setWeight(request.getWeight());
-        }
-        if (request.getHeight() != null) {
-            productVariants.setHeight(request.getHeight());
-        }
-        if (request.getWidth() != null) {
-            productVariants.setWidth(request.getWidth());
-        }
-        if (request.getLength() != null) {
-            productVariants.setLength(request.getLength());
-        }
-        if (request.getBarCode() != null) {
-            productVariants.setBarCode(request.getBarCode());
-        }
-        if (request.getQuantity() != null) {
-            productVariants.setQuantity(request.getQuantity());
-        }
-        if (request.getBasePrice() != null) {
-            productVariants.setBasePrice(request.getBasePrice());
-        }
-        if (request.getCurrPrice() != null) {
-            productVariants.setBasePrice(request.getCurrPrice());
-        }
-        if (request.getVariantStatus() != null) {
-            productVariants.setVariantStatus(request.getVariantStatus());
-        }
-        if (request.getColorCode() != null) {
-            productVariants.setColorCode(request.getColorCode());
-        }
+    ProductVariants productVariants = productVariantsRepository.findById(request.getProductId())
+            .orElseThrow(() -> new EntityNotFoundException("Product ID not found."));
 
-        if (request.getProductScore() != null) {
-            productVariants.setProductScore(request.getProductScore());
-        }
+    updateProductVariantFields(productVariants, request);
+
+    productVariants = productVariantsRepository.save(productVariants);
+    return mapToProductVariantResponse(productVariants);
+}
+
+    private void updateProductVariantFields(ProductVariants productVariants, ProductVariantsRequest request) {
+        Optional.ofNullable(request.getVariantName()).ifPresent(productVariants::setVariantName);
+        Optional.ofNullable(request.getVariantDescription()).ifPresent(productVariants::setVariantDescription);
+        Optional.ofNullable(request.getWeight()).ifPresent(productVariants::setWeight);
+        Optional.ofNullable(request.getHeight()).ifPresent(productVariants::setHeight);
+        Optional.ofNullable(request.getWidth()).ifPresent(productVariants::setWidth);
+        Optional.ofNullable(request.getLength()).ifPresent(productVariants::setLength);
+        Optional.ofNullable(request.getBarCode()).ifPresent(productVariants::setBarCode);
+        Optional.ofNullable(request.getQuantity()).ifPresent(productVariants::setQuantity);
+        Optional.ofNullable(request.getBasePrice()).ifPresent(productVariants::setBasePrice);
+        Optional.ofNullable(request.getCurrPrice()).ifPresent(productVariants::setBasePrice);
+        Optional.ofNullable(request.getVariantStatus()).ifPresent(productVariants::setVariantStatus);
+        Optional.ofNullable(request.getColorCode()).ifPresent(productVariants::setColorCode);
+        Optional.ofNullable(request.getProductScore()).ifPresent(productVariants::setProductScore);
 
         if (request.getImageId() != null) {
             ProductImage productImage = productImageRepository.findById(request.getImageId())
                     .orElseThrow(() -> new RuntimeException("Image thumbnail is not found."));
             productVariants.setProductImage(productImage);
         }
-        productVariants = productVariantsRepository.save(productVariants);
-
-        return mapToProductVariantResponse(productVariants);
     }
 
 
