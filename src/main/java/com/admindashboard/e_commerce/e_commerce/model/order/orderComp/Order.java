@@ -1,7 +1,8 @@
-package com.admindashboard.e_commerce.e_commerce.model.order;
+package com.admindashboard.e_commerce.e_commerce.model.order.orderComp;
 
 import com.admindashboard.e_commerce.e_commerce.dto.OrderStatus;
 import com.admindashboard.e_commerce.e_commerce.dto.ShippingMethod;
+import com.admindashboard.e_commerce.e_commerce.model.order.orderItemComp.OrderItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
