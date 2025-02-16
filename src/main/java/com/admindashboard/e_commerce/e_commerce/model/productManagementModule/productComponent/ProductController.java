@@ -84,8 +84,18 @@ public class ProductController {
         if (productRepository.existsById(productID)) {
             productRepository.deleteById(productID);
             return ResponseEntity.ok("Product deleted successfully.");
-        } else {
+        }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
+        }
+    }
+
+    @GetMapping("/find-by-sku/{sku}")
+    public ResponseEntity<?>findProductSku(@PathVariable String sku)
+    {
+        try{
+            return ResponseEntity.ok(productRepository.findBySku(sku));
+        }catch(Exception ex){
+            return new ResponseEntity<>(new MessageResponse("Product is not found.",ResponseType.E),HttpStatus.NOT_FOUND);
         }
     }
 

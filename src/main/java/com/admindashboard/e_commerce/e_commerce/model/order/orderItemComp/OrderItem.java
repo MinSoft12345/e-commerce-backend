@@ -1,5 +1,6 @@
-package com.admindashboard.e_commerce.e_commerce.model.order;
+package com.admindashboard.e_commerce.e_commerce.model.order.orderItemComp;
 
+import com.admindashboard.e_commerce.e_commerce.model.order.orderComp.Order;
 import com.admindashboard.e_commerce.e_commerce.model.productManagementModule.productComponent.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
