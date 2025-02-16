@@ -90,14 +90,18 @@ public class ProductController {
     }
 
     @GetMapping("/find-by-sku/{sku}")
-    public ResponseEntity<?>findProductSku(@PathVariable String sku)
-    {
-        try{
-            return ResponseEntity.ok(productRepository.findBySku(sku));
-        }catch(Exception ex){
-            return new ResponseEntity<>(new MessageResponse("Product is not found.",ResponseType.E),HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> findProductSku(@PathVariable String sku) {
+        try {
+            ProductResponse productResponse = productService.findBySku(sku);
+            return ResponseEntity.ok(productResponse);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage(), ResponseType.E), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(new MessageResponse("Internal server error.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }
