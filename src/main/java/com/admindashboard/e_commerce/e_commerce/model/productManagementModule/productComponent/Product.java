@@ -76,7 +76,7 @@ public class Product {
     @Column(name = "tenant_id", nullable = false)
     private String tenantId;
 
-    @Column(name = "sku")
+    @Column(name = "sku",unique = true)
     private String sku;
 
     @Column(name = "score")
