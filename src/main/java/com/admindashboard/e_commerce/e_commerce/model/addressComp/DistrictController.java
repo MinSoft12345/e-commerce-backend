@@ -26,23 +26,7 @@ public class DistrictController {
         }
     }
 
-    @GetMapping("/find-districts/{divisionName}")
-    public ResponseEntity<?> districtList(@PathVariable String divisionName)
-    {
-        try {
-            return ResponseEntity.ok(addressService.findDistrictList(divisionName));
-        }catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
-        }
-    }
 
-    @GetMapping("/find-subDistricts/{districtName}")
-    public ResponseEntity<?> subDistrictList(@PathVariable String districtName)
-    {
-        try {
-            return ResponseEntity.ok(addressService.findSubDistrictList(districtName));
-        }catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
-        }
-    }
+
+
 }
