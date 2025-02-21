@@ -1,5 +1,6 @@
 package com.admindashboard.e_commerce.e_commerce.model.order.orderComp;
 
+import com.admindashboard.e_commerce.e_commerce.dto.ShippingMethod;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
@@ -21,11 +23,36 @@ public class OrderDto {
     private String id;
     private String orderId;
     private Integer trackingNumber;
-    private String shippedMethod;
+
+    private ShippingMethod deliveryMethod;//Shipping method actually delivery method
+
     private String currentStatus;
     private LocalDateTime lastUpdatedDateTime;
+    private LocalDateTime orderDate;
     private String shippingAddress;
     private OffsetDateTime estimatedDeliveryDate;
     private String carrierDetails;
     private Boolean isDelivered;
+    private String productId;
+    private String subDistrictId;
+    private String manualCustomerId;
+    private Integer quantity = 0;
+    private String adminNotes;
+    private String customerNotes;
+
+    private String paymentMethod;
+
+    private String addressLine;
+
+    private String manualCustomerName;
+
+    private String manualCustomerPhone;
+
+    private String divisionName;
+
+    private String districtName;
+
+    private String subDistrictName;
+
+    private BigDecimal subTotal;
 }
