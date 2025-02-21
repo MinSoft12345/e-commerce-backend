@@ -2,18 +2,11 @@ package com.admindashboard.e_commerce.e_commerce.model.order.orderComp;
 
 import com.admindashboard.e_commerce.e_commerce.dto.OrderStatus;
 import com.admindashboard.e_commerce.e_commerce.dto.ShippingMethod;
+import com.admindashboard.e_commerce.e_commerce.model.addressComp.SubDistrict;
+import com.admindashboard.e_commerce.e_commerce.model.manualCustomer.ManualCustomer;
 import com.admindashboard.e_commerce.e_commerce.model.order.orderItemComp.OrderItem;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,6 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "EC_ORDER")
+@Builder
 public class Order {
 
     @Id
@@ -75,6 +69,20 @@ public class Order {
     @Column(length = 1000)
     private String customerNotes;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "address_line")
+    private String addressLine;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "sub_district_id")
+    private SubDistrict subDistrict;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "manual_customer_id")
+    private ManualCustomer manualCustomer;
+
 
     // later will add
 //    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
@@ -96,5 +104,4 @@ public class Order {
                 .add(this.taxAmount)
                 .subtract(this.discountAmount != null ? this.discountAmount : BigDecimal.ZERO);
     }
-
 }

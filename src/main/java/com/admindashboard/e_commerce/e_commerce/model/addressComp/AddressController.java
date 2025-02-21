@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RestController
@@ -26,6 +23,26 @@ public class AddressController {
             return ResponseEntity.ok(addressService.addAddress(addressDto));
         }catch (Exception ex){
             return new ResponseEntity<>(new MessageResponse("Bad request or internal error.", ResponseType.E), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/find-subDistricts/{districtName}")
+    public ResponseEntity<?> subDistrictList(@PathVariable String districtName)
+    {
+        try {
+            return ResponseEntity.ok(addressService.findSubDistrictList(districtName));
+        }catch (Exception ex){
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/find-districts/{divisionName}")
+    public ResponseEntity<?> districtList(@PathVariable String divisionName)
+    {
+        try {
+            return ResponseEntity.ok(addressService.findDistrictList(divisionName));
+        }catch (Exception ex){
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
         }
     }
 }

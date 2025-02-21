@@ -1,4 +1,4 @@
-package com.admindashboard.e_commerce.e_commerce.model.order.orderComp;
+package com.admindashboard.e_commerce.e_commerce.model.addressComp;
 
 import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
 import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
@@ -11,22 +11,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
 @RestController
-@RequestMapping("/api/order")
-public class OrderController {
-
+@Controller
+@RequestMapping("/api/division")
+public class DivisionController {
     @Autowired
-    private OrderService orderService;
+    private AddressService addressService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addOrder(@RequestBody OrderDto orderDto)
+    public ResponseEntity<?> addDivision(@RequestBody AddressDto addressDto)
     {
-        try{
-            return ResponseEntity.ok(orderService.addOrder(orderDto));
+        try {
+            return ResponseEntity.ok(addressService.addDivision(addressDto));
         }catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("Bad request or internal error."+ex.getMessage(), ResponseType.E), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
         }
     }
-
 }
