@@ -28,7 +28,6 @@ public class Employee extends UserBase implements Serializable {
     @GeneratedValue(generator = "idGen")
     private String id;
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id")
     private User user;
