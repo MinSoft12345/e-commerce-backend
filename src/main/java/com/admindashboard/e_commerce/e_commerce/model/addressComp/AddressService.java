@@ -99,7 +99,7 @@ public class AddressService {
         division = divisionRepository.save(division);
 
         return AddressDto.builder()
-                .districtId(division.getId())
+                .divisionId(division.getId())
                 .divisionName(division.getDivisionName())
                 .divisionCode(division.getDivisionCode())
                 .postCode(Math.toIntExact(division.getPostalCode()))

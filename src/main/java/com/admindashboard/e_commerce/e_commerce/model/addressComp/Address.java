@@ -1,14 +1,18 @@
 package com.admindashboard.e_commerce.e_commerce.model.addressComp;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
 @Table(name = "EC_ADDRESS")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
 
     @Id
