@@ -9,30 +9,26 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
-@Table(name = "EC_ADDRESS")
+@Table(name = "EC_SUB_DISTRICT")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
+public class SubDistrict {
 
     @Id
     @GenericGenerator(name = "idGen", strategy = "uuid.hex")
     @GeneratedValue(generator = "idGen")
     private String id;
 
-    @Column(name = "address_line")
-    private String addressLine;
+    @Column(name = "sub_district_name",unique = true)
+    private String subDistrictName;
 
-    @Column(name = "post_code")
-    private Integer postCode;
+    @Column(name = "sub_district_code",unique = true)
+    private String subDistrictCode;
 
-    @Column(name = "state")
-    private String state;
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "district_id")
+    private District district;
 
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
 
 }
