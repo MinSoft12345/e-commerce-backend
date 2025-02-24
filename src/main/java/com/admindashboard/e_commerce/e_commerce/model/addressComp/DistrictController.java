@@ -19,10 +19,12 @@ public class DistrictController {
     @PostMapping("/add")
     public ResponseEntity<?> addDistrict(@RequestBody AddressDto addressDto)
     {
+        System.out.println(addressDto);
         try {
             return ResponseEntity.ok(addressService.addDistrict(addressDto));
         }catch (Exception ex){
-            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
+            System.out.println(ex.getMessage());
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request."+ex.getMessage(), ResponseType.E), HttpStatus.BAD_REQUEST);
         }
     }
 
