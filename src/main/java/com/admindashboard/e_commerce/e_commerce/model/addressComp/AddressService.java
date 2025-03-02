@@ -63,10 +63,13 @@ public class AddressService {
 
     }
 
-    public AddressDto addDistrict(AddressDto addressDto)
-    {
+    public AddressDto addDistrict(AddressDto addressDto) {
         Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
-        var district = District.builder()
+        if (division == null) {
+            throw new RuntimeException("Division not found");
+        }
+
+        District district = District.builder()
                 .districtName(addressDto.getDistrictName())
                 .districtCode(addressDto.getDistrictCode())
                 .division(division)
@@ -77,9 +80,8 @@ public class AddressService {
         return AddressDto.builder()
                 .districtId(district.getId())
                 .districtName(district.getDistrictName())
-                .divisionName(district.getDivision().getDivisionName())
+                .divisionName(division.getDivisionName())
                 .build();
-
     }
 
     public AddressDto addDivision(AddressDto addressDto) {
@@ -112,5 +114,12 @@ public class AddressService {
         return subDistrictRepository.findByDistrictName(districtName);
     }
 
+    public List<Division> getAllDivisions() {
+        return divisionRepository.findAll();
+    }
+
+    public List<District> getAllDistricts() {
+        return districtRepository.findAll();
+    }
 
 }

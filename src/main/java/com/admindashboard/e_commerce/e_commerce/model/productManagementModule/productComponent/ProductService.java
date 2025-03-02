@@ -110,6 +110,12 @@ public class ProductService {
         return mapToProductResponse(product);
     }
 
+    public ProductResponse findBySku(String sku)
+    {
+        Product product = productRepository.findBySku(sku).orElseThrow(()-> new EntityNotFoundException("Product is not found."));
+        return mapToProductResponse(product);
+    }
+
 
     public ProductResponse updateProduct(ProductRequest request)
     {
