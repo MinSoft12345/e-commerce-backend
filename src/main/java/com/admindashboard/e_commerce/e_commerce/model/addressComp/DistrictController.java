@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 @Controller
 @RequestMapping("/api/district")
@@ -17,16 +19,20 @@ public class DistrictController {
     private AddressService addressService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addDistrict(@RequestBody AddressDto addressDto)
-    {
+    public ResponseEntity<?> addDistrict(@RequestBody AddressDto addressDto) {
         System.out.println(addressDto);
         try {
-            return ResponseEntity.ok(addressService.addDistrict(addressDto));
-        }catch (Exception ex){
+            AddressDto response = addressService.addDistrict(addressDto);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            return new ResponseEntity<>(new MessageResponse("Internal error or bad request."+ex.getMessage(), ResponseType.E), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    new MessageResponse("Internal error or bad request: " + ex.getMessage(), ResponseType.E),
+                    HttpStatus.BAD_REQUEST
+            );
         }
     }
+
 
 
 

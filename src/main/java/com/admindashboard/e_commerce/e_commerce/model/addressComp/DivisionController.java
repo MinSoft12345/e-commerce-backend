@@ -18,11 +18,20 @@ public class DivisionController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addDivision(@RequestBody AddressDto addressDto) {
-        System.out.println(addressDto);
+        System.out.println("Received AddressDto: " + addressDto);
+
+        if (addressDto.getDivisionName() == null || addressDto.getDivisionCode() == null || addressDto.getPostCode() == null) {
+            return new ResponseEntity<>(new MessageResponse("Invalid request: Missing required fields.", ResponseType.E), HttpStatus.BAD_REQUEST);
+        }
+
         try {
-            return ResponseEntity.ok(addressService.addDivision(addressDto));
+            AddressDto response = addressService.addDivision(addressDto);
+            return ResponseEntity.ok(response);
+        } catch (NumberFormatException ex) {
+            return new ResponseEntity<>(new MessageResponse("Invalid postal code format.", ResponseType.E), HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
-            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
