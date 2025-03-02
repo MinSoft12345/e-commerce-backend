@@ -114,5 +114,12 @@ public class AddressService {
         return subDistrictRepository.findByDistrictName(districtName);
     }
 
+    public List<Division> getAllDivisions() {
+        return divisionRepository.findAll();
+    }
+
+    public List<District> getAllDistricts() {
+        return districtRepository.findAll();
+    }
 
 }

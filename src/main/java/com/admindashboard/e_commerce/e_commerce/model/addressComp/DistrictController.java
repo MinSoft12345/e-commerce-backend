@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -33,7 +34,15 @@ public class DistrictController {
         }
     }
 
-
+    @GetMapping("/getAllList")
+    public ResponseEntity<List<District>> getAllDistricts() {
+        try {
+            return ResponseEntity.ok(addressService.getAllDistricts());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 

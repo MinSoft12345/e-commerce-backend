@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Controller
 @RequestMapping("/api/division")
@@ -31,6 +33,16 @@ public class DivisionController {
             return new ResponseEntity<>(new MessageResponse("Invalid postal code format.", ResponseType.E), HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
             return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getAllList")
+    public ResponseEntity<List<Division>> getAllDivisions() {
+        try {
+            return ResponseEntity.ok(addressService.getAllDivisions());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
