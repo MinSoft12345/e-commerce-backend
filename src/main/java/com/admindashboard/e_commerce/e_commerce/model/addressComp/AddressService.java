@@ -1,13 +1,7 @@
 package com.admindashboard.e_commerce.e_commerce.model.addressComp;
 
-import com.admindashboard.e_commerce.e_commerce.allenum.ResponseType;
-import com.admindashboard.e_commerce.e_commerce.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -69,10 +63,13 @@ public class AddressService {
 
     }
 
-    public AddressDto addDistrict(AddressDto addressDto)
-    {
+    public AddressDto addDistrict(AddressDto addressDto) {
         Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
-        var district = District.builder()
+        if (division == null) {
+            throw new RuntimeException("Division not found");
+        }
+
+        District district = District.builder()
                 .districtName(addressDto.getDistrictName())
                 .districtCode(addressDto.getDistrictCode())
                 .division(division)
@@ -83,20 +80,22 @@ public class AddressService {
         return AddressDto.builder()
                 .districtId(district.getId())
                 .districtName(district.getDistrictName())
-                .divisionName(district.getDivision().getDivisionName())
+                .divisionName(division.getDivisionName())
                 .build();
-
     }
 
-    public AddressDto addDivision(AddressDto addressDto)
-    {
-        var division = Division.builder()
-                .divisionName(addressDto.getDivisionName())
-                .divisionCode(addressDto.getDivisionCode())
-                .postalCode(Long.valueOf(addressDto.getPostCode()))
-                .build();
+    public AddressDto addDivision(AddressDto addressDto) {
+        Division division = divisionRepository.findByDivisionCode(addressDto.getDivisionName());
 
-        division = divisionRepository.save(division);
+        if (division == null) {
+            division = Division.builder()
+                    .divisionName(addressDto.getDivisionName())
+                    .divisionCode(addressDto.getDivisionCode())
+                    .postalCode(Long.valueOf(addressDto.getPostCode()))
+                    .build();
+
+            division = divisionRepository.save(division);
+        }
 
         return AddressDto.builder()
                 .divisionId(division.getId())
@@ -115,5 +114,12 @@ public class AddressService {
         return subDistrictRepository.findByDistrictName(districtName);
     }
 
+    public List<Division> getAllDivisions() {
+        return divisionRepository.findAll();
+    }
+
+    public List<District> getAllDistricts() {
+        return districtRepository.findAll();
+    }
 
 }
