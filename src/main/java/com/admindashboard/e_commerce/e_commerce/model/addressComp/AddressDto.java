@@ -20,12 +20,14 @@ public class AddressDto {
     private String state;
     private String city;
     private String country;
+    private String countryCode;
     private String divisionName;
     private String districtName;
     private String subDistrictName;
     private String divisionCode;
     private String districtCode;
     private String subDistrictCode;
+    private String countryId;
     private String divisionId;
     private String districtId;
     private String subDistrictId;

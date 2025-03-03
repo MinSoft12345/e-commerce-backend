@@ -11,6 +11,8 @@ import java.util.List;
 public interface DistrictRepository extends JpaRepository<District,String> {
     District findByDistrictName(String districtName);
 
+    District findByDistrictCode(String districtCode);
+
     @Query("SELECT u FROM District u " +
             "join u.division d " +
             "WHERE d.divisionName = :divisionName")

@@ -12,22 +12,21 @@ import java.util.List;
 
 @RestController
 @Controller
-@RequestMapping("/api/division")
-public class DivisionController {
+@RequestMapping("/api/country")
+public class CountryController {
 
     @Autowired
     private AddressService addressService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addDivision(@RequestBody AddressDto addressDto) {
-        System.out.println("Received AddressDto: " + addressDto);
+    public ResponseEntity<?> addCountry(@RequestBody AddressDto addressDto) {
 
-        if (addressDto.getDivisionName() == null || addressDto.getDivisionCode() == null || addressDto.getCountry() == null) {
+        if (addressDto.getCountry() == null || addressDto.getCountryCode() == null ) {
             return new ResponseEntity<>(new MessageResponse("Invalid request: Missing required fields.", ResponseType.E), HttpStatus.BAD_REQUEST);
         }
 
         try {
-            AddressDto response = addressService.addDivision(addressDto);
+            AddressDto response = addressService.addCountry(addressDto);
             return ResponseEntity.ok(response);
         } catch (NumberFormatException ex) {
             return new ResponseEntity<>(new MessageResponse("Invalid postal code format.", ResponseType.E), HttpStatus.BAD_REQUEST);
@@ -37,11 +36,10 @@ public class DivisionController {
     }
 
     @GetMapping("/getAllList")
-    public ResponseEntity<List<Division>> getAllDivisions() {
+    public ResponseEntity<List<Country>> getAllCountries() {
         try {
-            return ResponseEntity.ok(addressService.getAllDivisions());
+            return ResponseEntity.ok(addressService.getAllCountries());
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
