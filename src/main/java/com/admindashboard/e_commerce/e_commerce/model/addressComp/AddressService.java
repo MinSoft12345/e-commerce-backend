@@ -140,7 +140,9 @@ public class AddressService {
     public List<SubDistrict>findSubDistrictList(String districtName){
         return subDistrictRepository.findByDistrictName(districtName);
     }
-
+    public List<Country> getAllCountries() {
+        return countryRepository.findAll();
+    }
     public List<Division> getAllDivisions() {
         return divisionRepository.findAll();
     }
