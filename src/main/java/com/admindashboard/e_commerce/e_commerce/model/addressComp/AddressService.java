@@ -12,6 +12,9 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     @Autowired
+    private CountryRepository countryRepository;
+
+    @Autowired
     private DistrictRepository districtRepository;
 
     @Autowired
@@ -49,6 +52,7 @@ public class AddressService {
         var subDistrict = SubDistrict.builder()
                 .subDistrictName(addressDto.getSubDistrictName())
                 .subDistrictCode(addressDto.getSubDistrictCode())
+                .postalCode(Long.valueOf(addressDto.getPostCode()))
                 .district(district)
                 .build();
 
@@ -57,6 +61,7 @@ public class AddressService {
         return AddressDto.builder()
                 .subDistrictId(subDistrict.getId())
                 .subDistrictName(subDistrict.getSubDistrictName())
+                .postCode(Math.toIntExact(subDistrict.getPostalCode()))
                 .districtName(subDistrict.getDistrict().getDistrictName())
                 .divisionName(subDistrict.getDistrict().getDivision().getDivisionName())
                 .build();
@@ -66,7 +71,7 @@ public class AddressService {
     public AddressDto addDistrict(AddressDto addressDto) {
         Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
         if (division == null) {
-            throw new RuntimeException("Division not found");
+            throw new RuntimeException("Division is not found");
         }
 
         District district = District.builder()
@@ -85,13 +90,18 @@ public class AddressService {
     }
 
     public AddressDto addDivision(AddressDto addressDto) {
-        Division division = divisionRepository.findByDivisionCode(addressDto.getDivisionName());
+        Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
+        Country country = countryRepository.findByCountryName(addressDto.getCountry());
+
+        if (country == null) {
+            throw new RuntimeException("Country is not found");
+        }
 
         if (division == null) {
             division = Division.builder()
                     .divisionName(addressDto.getDivisionName())
                     .divisionCode(addressDto.getDivisionCode())
-                    .postalCode(Long.valueOf(addressDto.getPostCode()))
+                    .country(country)
                     .build();
 
             division = divisionRepository.save(division);
@@ -101,9 +111,28 @@ public class AddressService {
                 .divisionId(division.getId())
                 .divisionName(division.getDivisionName())
                 .divisionCode(division.getDivisionCode())
-                .postCode(Math.toIntExact(division.getPostalCode()))
+                .country(country.getCountryName())
+                .countryId(country.getId())
                 .build();
+    }
 
+    public AddressDto addCountry(AddressDto addressDto) {
+        Country country = countryRepository.findByCountryCode(addressDto.getCountry());
+
+        if (country == null) {
+            country = Country.builder()
+                    .countryName(addressDto.getCountry())
+                    .countryCode(addressDto.getCountryCode())
+                    .build();
+
+            country = countryRepository.save(country);
+        }
+
+        return AddressDto.builder()
+                .countryId(country.getId())
+                .country(country.getCountryName())
+                .divisionCode(country.getCountryCode())
+                .build();
     }
 
     public List<District>findDistrictList(String divisionName){
@@ -113,7 +142,9 @@ public class AddressService {
     public List<SubDistrict>findSubDistrictList(String districtName){
         return subDistrictRepository.findByDistrictName(districtName);
     }
-
+    public List<Country> getAllCountries() {
+        return countryRepository.findAll();
+    }
     public List<Division> getAllDivisions() {
         return divisionRepository.findAll();
     }
