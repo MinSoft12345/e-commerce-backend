@@ -12,6 +12,9 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     @Autowired
+    private CountryRepository countryRepository;
+
+    @Autowired
     private DistrictRepository districtRepository;
 
     @Autowired
@@ -91,7 +94,7 @@ public class AddressService {
             division = Division.builder()
                     .divisionName(addressDto.getDivisionName())
                     .divisionCode(addressDto.getDivisionCode())
-                    .postalCode(Long.valueOf(addressDto.getPostCode()))
+//                    .postalCode(Long.valueOf(addressDto.getPostCode()))
                     .build();
 
             division = divisionRepository.save(division);
@@ -101,9 +104,28 @@ public class AddressService {
                 .divisionId(division.getId())
                 .divisionName(division.getDivisionName())
                 .divisionCode(division.getDivisionCode())
-                .postCode(Math.toIntExact(division.getPostalCode()))
+//                .postCode(Math.toIntExact(division.getPostalCode()))
                 .build();
 
+    }
+
+    public AddressDto addCountry(AddressDto addressDto) {
+        Country country = countryRepository.findByCountryCode(addressDto.getCountry());
+
+        if (country == null) {
+            country = Country.builder()
+                    .countryName(addressDto.getCountry())
+                    .countryCode(addressDto.getCountryCode())
+                    .build();
+
+            country = countryRepository.save(country);
+        }
+
+        return AddressDto.builder()
+                .countryId(country.getId())
+                .country(country.getCountryName())
+                .divisionCode(country.getCountryCode())
+                .build();
     }
 
     public List<District>findDistrictList(String divisionName){

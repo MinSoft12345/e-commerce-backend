@@ -26,7 +26,11 @@ public class Division {
     @Column(name = "division_code",unique = true)
     private String divisionCode;
 
-    @Column(name = "postal_code",unique = true)
-    private Long postalCode;
+//    @Column(name = "postal_code",unique = true)
+//    private Long postalCode;
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "country_id")
+    private Country country;
 
 }
