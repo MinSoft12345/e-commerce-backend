@@ -22,7 +22,7 @@ public class DivisionController {
     public ResponseEntity<?> addDivision(@RequestBody AddressDto addressDto) {
         System.out.println("Received AddressDto: " + addressDto);
 
-        if (addressDto.getDivisionName() == null || addressDto.getDivisionCode() == null || addressDto.getPostCode() == null) {
+        if (addressDto.getDivisionName() == null || addressDto.getDivisionCode() == null || addressDto.getCountry() == null) {
             return new ResponseEntity<>(new MessageResponse("Invalid request: Missing required fields.", ResponseType.E), HttpStatus.BAD_REQUEST);
         }
 

@@ -69,7 +69,7 @@ public class AddressService {
     public AddressDto addDistrict(AddressDto addressDto) {
         Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
         if (division == null) {
-            throw new RuntimeException("Division not found");
+            throw new RuntimeException("Division is not found");
         }
 
         District district = District.builder()
@@ -88,13 +88,18 @@ public class AddressService {
     }
 
     public AddressDto addDivision(AddressDto addressDto) {
-        Division division = divisionRepository.findByDivisionCode(addressDto.getDivisionName());
+        Division division = divisionRepository.findByDivisionName(addressDto.getDivisionName());
+        Country country = countryRepository.findByCountryName(addressDto.getCountry());
+
+        if (country == null) {
+            throw new RuntimeException("Country is not found");
+        }
 
         if (division == null) {
             division = Division.builder()
                     .divisionName(addressDto.getDivisionName())
                     .divisionCode(addressDto.getDivisionCode())
-//                    .postalCode(Long.valueOf(addressDto.getPostCode()))
+                    .country(country)
                     .build();
 
             division = divisionRepository.save(division);
@@ -104,9 +109,9 @@ public class AddressService {
                 .divisionId(division.getId())
                 .divisionName(division.getDivisionName())
                 .divisionCode(division.getDivisionCode())
-//                .postCode(Math.toIntExact(division.getPostalCode()))
+                .country(country.getCountryName())
+                .countryId(country.getId())
                 .build();
-
     }
 
     public AddressDto addCountry(AddressDto addressDto) {
