@@ -52,6 +52,7 @@ public class AddressService {
         var subDistrict = SubDistrict.builder()
                 .subDistrictName(addressDto.getSubDistrictName())
                 .subDistrictCode(addressDto.getSubDistrictCode())
+                .postalCode(Long.valueOf(addressDto.getPostCode()))
                 .district(district)
                 .build();
 
@@ -60,6 +61,7 @@ public class AddressService {
         return AddressDto.builder()
                 .subDistrictId(subDistrict.getId())
                 .subDistrictName(subDistrict.getSubDistrictName())
+                .postCode(Math.toIntExact(subDistrict.getPostalCode()))
                 .districtName(subDistrict.getDistrict().getDistrictName())
                 .divisionName(subDistrict.getDistrict().getDivision().getDivisionName())
                 .build();
