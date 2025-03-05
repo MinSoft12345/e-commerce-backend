@@ -29,8 +29,8 @@ public class OrderController {
         try{
             return ResponseEntity.ok(orderService.addOrder(orderDto));
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
-            return new ResponseEntity<>(new MessageResponse("Bad request or internal error."+ex.getMessage(), ResponseType.E), HttpStatus.BAD_REQUEST);
+//            System.out.println(ex.getMessage());
+            return new ResponseEntity<>(new MessageResponse("Internal server error: " + ex.getMessage(), ResponseType.E), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

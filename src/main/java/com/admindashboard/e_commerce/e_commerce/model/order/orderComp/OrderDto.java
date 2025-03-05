@@ -62,4 +62,7 @@ public class OrderDto {
     private BigDecimal subTotal;
 
     private List<OrderItem>itemList = new ArrayList<>();
+
+    private BigDecimal shippingFee;
+    private BigDecimal taxAmount;
 }
