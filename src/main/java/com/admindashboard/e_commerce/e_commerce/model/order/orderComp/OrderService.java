@@ -61,8 +61,17 @@ public class OrderService {
 
         * */
 
-        ManualCustomer manualCustomer = manualCustomerRepository.findById(orderDto.getManualCustomerId()).orElseThrow();
-        SubDistrict subDistrict = subDistrictRepository.findById(orderDto.getSubDistrictId()).orElseThrow();
+//        ManualCustomer manualCustomer = manualCustomerRepository.findById(orderDto.getManualCustomerId()).orElseThrow();
+//        SubDistrict subDistrict = subDistrictRepository.findById(orderDto.getSubDistrictId()).orElseThrow();
+        ManualCustomer manualCustomer = manualCustomerRepository.findById(orderDto.getManualCustomerId())
+                .orElseThrow(() -> new RuntimeException("Manual Customer not found"));
+
+        SubDistrict subDistrict = subDistrictRepository.findById(orderDto.getSubDistrictId())
+                .orElseThrow(() -> new RuntimeException("SubDistrict not found"));
+
+        if (orderDto.getProductIdList() == null || orderDto.getProductIdList().isEmpty()) {
+            throw new RuntimeException("Product list cannot be empty");
+        }
 
         BigDecimal subtotalAmount = new BigDecimal("0.0");
 
@@ -76,6 +85,8 @@ public class OrderService {
                 .shippingMethod(orderDto.getDeliveryMethod())
                 .paymentMethod(orderDto.getPaymentMethod())
                 .addressLine(orderDto.getAddressLine())
+                .shippingFee(orderDto.getShippingFee())
+                .taxAmount(orderDto.getTaxAmount())
                 .build();
 
         List<OrderItem> itemList = new ArrayList<>();
@@ -115,6 +126,8 @@ public class OrderService {
                 .paymentMethod(order.getPaymentMethod())
                 .addressLine(order.getAddressLine())
                 .itemList(order.getOrderItems())
+                .shippingFee(order.getShippingFee())
+                .taxAmount(order.getTaxAmount())
                 .build();
     }
 
