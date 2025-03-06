@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ManualCustomerRepository extends JpaRepository<ManualCustomer,String> {
+    ManualCustomer findByPhoneNumber(String phoneNumber);
 }
