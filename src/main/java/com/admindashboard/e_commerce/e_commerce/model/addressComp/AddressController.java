@@ -45,4 +45,14 @@ public class AddressController {
             return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/find-divisions/{countryName}")
+    public ResponseEntity<?> divisionList(@PathVariable String countryName)
+    {
+        try {
+            return ResponseEntity.ok(addressService.findDivisionList(countryName));
+        }catch (Exception ex){
+            return new ResponseEntity<>(new MessageResponse("Internal error or bad request.", ResponseType.E), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
