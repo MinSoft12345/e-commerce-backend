@@ -41,7 +41,7 @@ public class OrderService {
     private SubDistrictRepository subDistrictRepository;
 
     @Transactional
-    public OrderDto addOrder(@RequestBody OrderDto orderDto){
+    public boolean addOrder(@RequestBody OrderDto orderDto){
 
         /*
         manualCustomerId
@@ -112,23 +112,28 @@ public class OrderService {
 
         order = orderRepository.save(order);
 
-        return OrderDto.builder()
-                .orderDate(order.getOrderDate())
-                .manualCustomerId(order.getManualCustomer().getId())
-                .adminNotes(order.getAdminNotes())
-                .customerNotes(order.getCustomerNotes())
-                .divisionName(order.getSubDistrict().getDistrict().getDivision().getDivisionName())
-                .districtName(order.getSubDistrict().getDistrict().getDistrictName())
-                .subDistrictName(order.getSubDistrict().getSubDistrictName())
-                .subTotal(order.getTotalAmount())
-                .currentStatus(String.valueOf(order.getStatus()))
-                .deliveryMethod(order.getShippingMethod())
-                .paymentMethod(order.getPaymentMethod())
-                .addressLine(order.getAddressLine())
-                .itemList(order.getOrderItems())
-                .shippingFee(order.getShippingFee())
-                .taxAmount(order.getTaxAmount())
-                .build();
+        try{
+            OrderDto.builder()
+                    .orderDate(order.getOrderDate())
+                    .manualCustomerId(order.getManualCustomer().getId())
+                    .adminNotes(order.getAdminNotes())
+                    .customerNotes(order.getCustomerNotes())
+                    .divisionName(order.getSubDistrict().getDistrict().getDivision().getDivisionName())
+                    .districtName(order.getSubDistrict().getDistrict().getDistrictName())
+                    .subDistrictName(order.getSubDistrict().getSubDistrictName())
+                    .subTotal(order.getTotalAmount())
+                    .currentStatus(String.valueOf(order.getStatus()))
+                    .deliveryMethod(order.getShippingMethod())
+                    .paymentMethod(order.getPaymentMethod())
+                    .addressLine(order.getAddressLine())
+                    .itemList(order.getOrderItems())
+                    .shippingFee(order.getShippingFee())
+                    .taxAmount(order.getTaxAmount())
+                    .build();
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     private OrderDto convertToOrderDto(Order order) {
