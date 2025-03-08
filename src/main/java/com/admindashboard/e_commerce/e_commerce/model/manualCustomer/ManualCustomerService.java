@@ -11,17 +11,27 @@ public class ManualCustomerService {
 
     public ManualCustomerDto addManualCustomer(ManualCustomerDto manualCustomerDto)
     {
-        var customer = ManualCustomer.builder()
-                .name(manualCustomerDto.getName())
-                .phoneNumber(manualCustomerDto.getPhoneNumber())
-                .build();
+        ManualCustomer manualCustomer = manualCustomerRepository.findByPhoneNumber(manualCustomerDto.getPhoneNumber());
+                if(manualCustomer != null){
+                    return ManualCustomerDto.builder()
+                            .id(manualCustomer.getId())
+                            .name(manualCustomer.getName())
+                            .phoneNumber(manualCustomer.getPhoneNumber())
+                            .build();
+                }
+                else{
+                    var customer = ManualCustomer.builder()
+                            .name(manualCustomerDto.getName())
+                            .phoneNumber(manualCustomerDto.getPhoneNumber())
+                            .build();
 
-        customer = manualCustomerRepository.save(customer);
+                    customer = manualCustomerRepository.save(customer);
 
-        return ManualCustomerDto.builder()
-                .id(customer.getId())
-                .name(customer.getName())
-                .phoneNumber(customer.getPhoneNumber())
-                .build();
+                    return ManualCustomerDto.builder()
+                            .id(customer.getId())
+                            .name(customer.getName())
+                            .phoneNumber(customer.getPhoneNumber())
+                            .build();
+                }
     }
 }
