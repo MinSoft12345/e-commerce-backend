@@ -22,7 +22,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "EC_CATEGORY")
+@Table(name = "EC_PRODUCT_PRICE")
 public class Price {
     @Id
     @GenericGenerator(name = "idGen", strategy = "uuid.hex")

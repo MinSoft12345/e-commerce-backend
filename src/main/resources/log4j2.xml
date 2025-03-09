@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="logPath">logs/app.log</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- File Appender -->
+        <RollingFile name="FileAppender" fileName="${logPath}"
+                     filePattern="logs/app-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="productFileAppender" fileName="${sys:catalina.base:-.}/logs/product.log"
+                     filePattern="${sys:catalina.base:-.}/logs/product.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="%d %-5p [%C{1}]:%L %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Set logging level -->
+
+
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="javax.persistence" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="org.springframework.security" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="org.springframework.transaction" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <Logger name="productLogs" level="INFO" additivity="false">
+            <AppenderRef ref="productFileAppender"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+        
+    </Loggers>
+</Configuration>
