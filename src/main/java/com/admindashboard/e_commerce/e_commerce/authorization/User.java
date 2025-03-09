@@ -69,6 +69,8 @@ public class User implements UserDetails {
     private String nidNo;
     private String photoPath;
 
+    private Boolean isDeleted;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

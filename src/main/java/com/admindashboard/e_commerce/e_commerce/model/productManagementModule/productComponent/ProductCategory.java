@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "EC_CATEGORY")
-public class Category {
+public class ProductCategory {
     @Id
     @GenericGenerator(name = "idGen", strategy = "uuid.hex")
     @GeneratedValue(generator = "idGen")
@@ -31,7 +31,11 @@ public class Category {
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
     private User createdBy;
 
-    private Integer productStock;
+    @Column(unique = true, nullable = false, length = 20)
+    private String code;
+
+    // don't think that it is needed , later if need then will add
+    //private Integer productStock;
     private Integer sale;
 
     @Column(length = 20)
